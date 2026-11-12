@@ -3,8 +3,8 @@ package com.ledger.account;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.ledger.model.CVCurrency;
 import com.ledger.exception.InsufficientBalanceException;
+import com.ledger.model.CVCurrency;
 
 public class Account extends BaseAccount {
 

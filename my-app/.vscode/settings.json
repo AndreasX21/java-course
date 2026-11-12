@@ -1,0 +1,13 @@
+{
+  "java.format.settings.url": "${workspaceFolder}/eclipse-formatter.xml",
+  "java.format.settings.profile": "ledger",
+  "java.format.comments.enabled": false,
+  "java.completion.importOrder": ["#", "java", "javax", "org", "com", ""],
+  "[java]": {
+    "editor.defaultFormatter": "redhat.java",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "explicit"
+    }
+  }
+}

@@ -3,8 +3,8 @@ package com.ledger.account;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.ledger.model.CVCurrency;
 import com.ledger.exception.InsufficientBalanceException;
+import com.ledger.model.CVCurrency;
 
 public abstract class BaseAccount {
     private final UUID id;
@@ -21,7 +21,7 @@ public abstract class BaseAccount {
 
     /**
      * Credit the account by the given amount.
-     * 
+     *
      * @param amount the amount to credit
      */
     public abstract void credit(BigDecimal amount);
@@ -29,7 +29,7 @@ public abstract class BaseAccount {
     /**
      * Debit the account by the given amount. If the account has insufficient
      * balance, throw an InsufficientBalanceException.
-     * 
+     *
      * @param amount the amount to debit
      * @throws InsufficientBalanceException if the account has insufficient balance
      */
@@ -57,7 +57,8 @@ public abstract class BaseAccount {
 
     @Override
     public String toString() {
-        return "Account [id=" + id.toString().substring(0, 8) + ", ownerName=" + ownerName + ", currency=" + currency
+        return "Account [id=" + id.toString().substring(0, 8) + ", ownerName=" + ownerName
+                + ", currency=" + currency
                 + ", balance=" + balance
                 + "]";
     }

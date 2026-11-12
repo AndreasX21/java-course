@@ -2,9 +2,9 @@ package com.ledger.app;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.UUID;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.stream.IntStream;
 
 import com.ledger.account.Account;
@@ -13,8 +13,8 @@ import com.ledger.model.CVCurrency;
 import com.ledger.repo.AccountRepository;
 import com.ledger.repo.IAccountRepository;
 import com.ledger.transaction.ITransactionProcessor;
-import com.ledger.transaction.TransactionProcessor;
 import com.ledger.transaction.TransactionDto;
+import com.ledger.transaction.TransactionProcessor;
 
 /**
  * Hello world!
@@ -43,7 +43,8 @@ public class App {
                     accounts.get(i % accounts.size()).getId(),
                     accounts.get((i + 1) % accounts.size()).getId(),
                     BigDecimal.valueOf(Math.random() * 35),
-                    LocalDateTime.of(2026, 1, 1, 0, 0, 0).plusDays((int) Math.floor(Math.random() * 365))));
+                    LocalDateTime.of(2026, 1, 1, 0, 0, 0)
+                            .plusDays((int) Math.floor(Math.random() * 365))));
         });
 
         transactionProcessor.processTransactions(transactions);
