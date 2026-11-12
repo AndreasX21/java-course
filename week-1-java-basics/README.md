@@ -1,4 +1,4 @@
-# my-app
+# week-1-java-basics
 
 Maven quickstart project (`com.ledger.app:my-app`) built with Java 25 (Eclipse Temurin) managed by jenv.
 
@@ -35,7 +35,7 @@ Register it with jenv and use it for this project (writes `.java-version`):
 
 ```bash
 jenv add /Library/Java/JavaVirtualMachines/temurin-25.jdk/Contents/Home
-cd my-app
+cd week-1-java-basics
 jenv local 25
 java -version
 ```
@@ -49,7 +49,7 @@ mvn -version
 
 ## Create this project
 
-From the parent directory of `my-app`:
+From the parent directory:
 
 ```bash
 mvn archetype:generate \
@@ -60,7 +60,7 @@ mvn archetype:generate \
   -DinteractiveMode=false
 ```
 
-That generates:
+Maven names that new directory after the artifact id:
 
 ```
 my-app/
@@ -70,10 +70,11 @@ my-app/
     └── test/java/com/ledger/app/AppTest.java
 ```
 
-Then pin Java 25 inside the new project:
+The repo directory is `week-1-java-basics`. The artifact id in `pom.xml` stays `my-app`. Rename the generated directory, then pin Java 25:
 
 ```bash
-cd my-app
+mv my-app week-1-java-basics
+cd week-1-java-basics
 jenv local 25
 ```
 

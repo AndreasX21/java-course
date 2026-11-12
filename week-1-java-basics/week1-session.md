@@ -27,7 +27,7 @@ src/main/java/com/ledger/
 
 One public class per file. The file name is the class name.
 
-From the `my-app` directory, after `App` exists, run:
+From the `week-1-java-basics` directory, after `App` exists, run:
 
 ```bash
 mvn -q compile exec:java
@@ -508,14 +508,15 @@ public class App {
         }
 
         List<TransactionDto> transactions = new ArrayList<>();
-        for (int i = 0; i < 100; i++) {
+        IntStream.range(0, 100).forEach(i -> {
             transactions.add(new TransactionDto(
                     UUID.randomUUID(),
                     accounts.get(i % accounts.size()).getId(),
                     accounts.get((i + 1) % accounts.size()).getId(),
                     BigDecimal.valueOf(Math.random() * 35),
-                    LocalDateTime.of(2026, 1, 1, 0, 0, 0).plusDays((int) Math.floor(Math.random() * 365))));
-        }
+                    LocalDateTime.of(2026, 1, 1, 0, 0, 0)
+                            .plusDays((int) Math.floor(Math.random() * 365))));
+        });
 
         transactionProcessor.processTransactions(transactions);
 
@@ -550,17 +551,25 @@ You should see zero or more `Transaction ... failed` lines, then ten `Account [.
 
 Each public class lives in its own file. The folder under `src/main/java` is the package name.
 
-### Account state
+### Enums
 
-`CVCurrency` is the closed set `USD`, `EUR`, and `CLP`. Each constant holds a private id and name, read through getters.
+`CVCurrency` limits a currency to `USD`, `EUR`, or `CLP`. Each constant keeps its id and name private and exposes them through `getId` and `getName`.
 
-Account fields are private. Other classes use `getId`, `getOwnerName`, `getCurrency`, and `getBalance`. `setBalance` is `protected`, so a subclass is what changes the balance.
+### Encapsulation
 
-Id, owner, currency, the repository map, and the processor's repository field are `final`. Balance stays assignable because `credit` and `debit` replace it.
+Account fields are private. Other classes read them with `getId`, `getOwnerName`, `getCurrency`, and `getBalance`. `setBalance` is `protected`, so only a subclass writes the balance.
+
+### Final fields
+
+`id`, `ownerName`, `currency`, the repository map, and the processor's repository field are `final`, so each is assigned once. `balance` stays assignable because `credit` and `debit` replace it.
+
+### Constructor chaining
 
 `BaseAccount` assigns the fields. `Account(UUID, String, CVCurrency, BigDecimal)` calls that constructor with `super`. `Account(String, CVCurrency)` calls the longer constructor with `this`, a new UUID, and `BigDecimal.ZERO`.
 
-Balance and transfer amount use `BigDecimal`. `credit` adds. `debit` subtracts. The starting balance uses `BigDecimal.valueOf(100)`. The random demo amounts pass through a `double` first.
+### BigDecimal
+
+Balance and transfer amount are `BigDecimal`. `credit` uses `add`. `debit` uses `subtract`. The starting balance is `BigDecimal.valueOf(100)`.
 
 ### Inheritance
 
@@ -589,3 +598,25 @@ The processor does not create a repository. `main` passes one into the construct
 `TransactionDto` fixes five components at construction and overrides `toString`.
 
 `Comparator.comparing(TransactionDto::timestamp).thenComparing(TransactionDto::id)` sorts oldest first, then by id. `List.sort` reorders the caller's list.
+
+## Take-home exercises
+
+### Different currencies
+
+`main` creates every account with `CVCurrency.USD`. Create some accounts with `EUR` and `CLP` as well. The enum already has those constants.
+
+A transfer debits the sender and credits the receiver with the same `BigDecimal`. Apply one of these rules in `TransactionProcessor`, before `debit`.
+
+Same currency. Read `getCurrency()` on both accounts. The transfer runs only when the two currencies are equal. When they differ, print a failure and leave both balances as they are.
+
+Conversion. Keep a rate from the sender currency to the receiver currency. Debit the sender in its own currency. Credit the receiver with that amount converted by the rate, still as a `BigDecimal`.
+
+### Tests with JUnit, AssertJ, and Mockito
+
+`pom.xml` already depends on `junit-jupiter-api`. Add `junit-jupiter-engine`, `assertj-core`, and `mockito-core` with test scope. The JUnit version is already managed by the BOM in the pom. Replace `AppTest`.
+
+A unit test covers one class. For `Account`, call `credit` and `debit` and check the balance, including a debit that throws `InsufficientBalanceException`. For `TransactionProcessor`, pass a Mockito mock of `IAccountRepository`. Stub `findById` so the mock returns the accounts that case needs.
+
+An integration test uses the real `AccountRepository` and the real `TransactionProcessor`. Save two accounts, process one `TransactionDto`, and check both balances. Cover the currency rule from the first exercise the same way.
+
+Write the checks with AssertJ. `assertThat(account.getBalance()).isEqualByComparingTo(...)` compares the numeric value. Run the suite with `mvn test`.
