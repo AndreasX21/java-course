@@ -1,0 +1,9 @@
+com/ledger/transaction/TransactionDto.class
+com/ledger/transaction/ITransactionProcessor.class
+com/ledger/repo/IAccountRepository.class
+com/ledger/model/CVCurrency.class
+com/ledger/account/Account.class
+com/ledger/account/BaseAccount.class
+com/ledger/repo/AccountRepository.class
+com/ledger/transaction/TransactionProcessor.class
+com/ledger/app/App.class

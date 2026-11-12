@@ -1,0 +1,10 @@
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/account/Account.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/account/BaseAccount.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/app/App.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/exception/InsufficientBalanceException.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/model/CVCurrency.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/repo/AccountRepository.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/repo/IAccountRepository.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/transaction/ITransactionProcessor.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/transaction/TransactionDto.java
+/Users/ap/Desktop/dev/java/my-app/src/main/java/com/ledger/transaction/TransactionProcessor.java
