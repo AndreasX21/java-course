@@ -25,7 +25,15 @@ src/main/java/com/ledger/collections/
 ├── list/FizzBuzz.java
 ├── set/ContainsDuplicate.java
 ├── queue/RecentCounter.java
-└── map/TwoSum.java
+├── map/TwoSum.java
+└── streams/
+    ├── Predicates.java
+    ├── Functions.java
+    ├── Consumers.java
+    ├── Comparators.java
+    ├── UnaryOperators.java
+    ├── BinaryOperators.java
+    └── Suppliers.java
 ```
 
 From the `week-2-collections-streams` directory, run a class with:
@@ -74,7 +82,7 @@ Code that receives `words`, `seen`, `calls`, or `indexByValue` depends on `List`
 
 ## One behavior each
 
-Replace `src/main/java/com/ledger/app/App.java` with the program below. Each block calls one method and prints the result. You see what that interface does before you use it in a problem. This file is the demo. The four problems go in files under `com.ledger.collections`. `ListOperations.java` goes there too. Without `-Dexec.mainClass`, `mvn -q compile exec:java` still starts `com.ledger.app.App`. That class is `mainClass` in `pom.xml`.
+Replace `src/main/java/com/ledger/app/App.java` with the program below. Each block calls one method and prints the result. You see what that interface does before you use it in a problem. This file is the demo. The four problems go in files under `com.ledger.collections`. The functional-interface examples go in `com.ledger.collections.streams`. Without `-Dexec.mainClass`, `mvn -q compile exec:java` still starts `com.ledger.app.App`. That class is `mainClass` in `pom.xml`.
 
 ```java
 package com.ledger.app;
@@ -335,13 +343,15 @@ A lambda is legal where the compiler already knows the target type. That type ha
 
 `Consumer<T>` has `void accept(T)`. `accept` returns nothing. `Iterable.forEach` takes a `Consumer`. `List`, `Set`, and `Queue` inherit `forEach`. `forEach` calls `accept` once per element. `Stream.forEach` takes a `Consumer` as well.
 
+`Supplier<T>` has `T get()`. It takes no argument and returns a value. `Optional.orElseGet` calls `get` only when the `Optional` is empty. `Collectors.toCollection` calls `get` to build the collection it fills. `ArrayList::new` is that supplier. A stream stage that already has an element does not take a `Supplier`. It takes one of the interfaces above, which receive the element.
+
 `Comparator<T>` has `int compare(T, T)`. A negative `int` means the first argument comes first. Zero means the two arguments count as equal. A positive `int` means the second argument comes first. `List.sort` takes a `Comparator`. `Set` and `Queue` have no `sort`. `Stream.sorted` takes a `Comparator` as well. Week 1 built one with `Comparator.comparing(TransactionDto::timestamp)`.
 
 `UnaryOperator<T>` is a `Function<T, T>`. The input type and the result type are the same. `List.replaceAll` takes a `UnaryOperator`. `replaceAll` calls it with the element and writes the returned value back into the same index. `Set` and `Queue` have no `replaceAll`. `Map.replaceAll` takes a `BiFunction`, with the key and the stored value as the two arguments.
 
 `BinaryOperator<T>` takes two values of type `T` and returns a `T`. `Stream.reduce` takes a `BinaryOperator`. `reduce` combines the elements into one result. `Map.merge` takes a `BiFunction` as its third argument. A `BinaryOperator` is a `BiFunction` whose two arguments and result are the same type, so `merge` accepts one. When the key is already present, `merge` calls it with the stored value and the new value.
 
-A method reference is a lambda that only calls one method. These four pairs are the same call:
+A method reference is a lambda that only calls one method. These pairs are the same call:
 
 ```java
 s -> System.out.println(s)    // Consumer<String>
@@ -355,11 +365,14 @@ Integer::sum
 
 s -> "Fizz".equals(s)         // Predicate<String>
 "Fizz"::equals
+
+() -> new ArrayList<String>() // Supplier<ArrayList<String>>
+ArrayList::new
 ```
 
-`System.out::println` is a reference to a method on one object. `String::toUpperCase` is a reference to an instance method on a class. `Integer::sum` is a reference to a static method. `"Fizz"::equals` is a reference to `equals` on that one string. Week 1 used the same form for `TransactionDto::timestamp` and `this::processTransaction`.
+`System.out::println` is a reference to a method on one object. `String::toUpperCase` is a reference to an instance method on a class. `Integer::sum` is a reference to a static method. `"Fizz"::equals` is a reference to `equals` on that one string. `ArrayList::new` is a reference to a constructor. Week 1 used the same form for `TransactionDto::timestamp` and `this::processTransaction`.
 
-Create `src/main/java/com/ledger/collections/ListOperations.java`. Each block starts from a fresh list. A later call must not see a list an earlier call already changed.
+Each of these calls is a class in `com.ledger.collections.streams`. `Predicates`, `Consumers`, `UnaryOperators`, and `Comparators` match the four calls in the program below. `Functions`, `BinaryOperators`, and `Suppliers` are there too. Each class uses its own short list.
 
 ```java
 package com.ledger.collections;
@@ -387,13 +400,13 @@ public class ListOperations {
 }
 ```
 
-Run it.
+Run one class. Swap the class name for `Functions`, `Consumers`, `Comparators`, `UnaryOperators`, `BinaryOperators`, or `Suppliers`.
 
 ```bash
-mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.ListOperations
+mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.streams.Predicates
 ```
 
-`forEach` prints five lines: `1`, `2`, `Fizz`, `4`, `Buzz`. `removeIf` prints `[1, 2, 4, Buzz, 7, 8, Buzz, 11, 13, 14, FizzBuzz]`. `replaceAll` prints `[1, 2, FIZZ, 4, BUZZ]`. `sort` prints `[1, 2, 4, 7, 8, 11, 13, 14, Fizz, Buzz, Fizz, Fizz, Buzz, Fizz, FizzBuzz]`.
+`Predicates` prints `[bb]` and `[a, a]`. `Functions` prints `[1, 2, 3]`. `Consumers` prints `a` and `bb`. `Comparators` prints `[a, bb, ccc]`. `UnaryOperators` prints `[A, BB]`. `BinaryOperators` prints `6` and `{a=2}`. `Suppliers` prints `empty`, `present`, and `[a, bb]`.
 
 `List.forEach` takes a `Consumer<String>`. `System.out::println` prints each word. `List.removeIf` takes a `Predicate<String>` and drops every `"Fizz"`. The other words stay in their original order. `List.replaceAll` takes a `UnaryOperator<String>` and writes the upper-case word back into the same index. `List.sort` takes a `Comparator<String>`. `Comparator.comparing(String::length)` builds that comparator from the length of each word. `List.sort` is stable. Two words of equal length stay in the order they already had.
 
@@ -401,7 +414,7 @@ mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.ListOperations
 
 ### Recap
 
-A lambda needs a target type with one abstract method. The types above are `Predicate`, `Function`, `IntFunction`, `Consumer`, `Comparator`, `UnaryOperator`, and `BinaryOperator`. A method reference is a lambda whose body is a single call. In the program above, `List.forEach` takes the `Consumer`, `List.removeIf` takes the `Predicate`, `List.replaceAll` takes the `UnaryOperator`, and `List.sort` takes the `Comparator`.
+A lambda needs a target type with one abstract method. The types above are `Predicate`, `Function`, `IntFunction`, `Consumer`, `Supplier`, `Comparator`, `UnaryOperator`, and `BinaryOperator`. A method reference is a lambda whose body is a single call. In the program above, `List.forEach` takes the `Consumer`, `List.removeIf` takes the `Predicate`, `List.replaceAll` takes the `UnaryOperator`, and `List.sort` takes the `Comparator`.
 
 ## Streams
 
@@ -472,7 +485,7 @@ A `Map` stores each value under a key. `containsKey` tests presence. `get` reads
 
 A lambda is legal where the compiler already knows a target type with one abstract method.
 
-`Collection.removeIf` and `Stream.filter` take a `Predicate`. `Stream.map` takes a `Function`. `IntStream.mapToObj` takes an `IntFunction`. `Iterable.forEach` and `Stream.forEach` take a `Consumer`. `List.sort` and `Stream.sorted` take a `Comparator`. `List.replaceAll` takes a `UnaryOperator`. `Stream.reduce` takes a `BinaryOperator`. `Map.merge` takes a `BiFunction` as its third argument. A `BinaryOperator` is that `BiFunction` when both arguments and the result share one type.
+`Collection.removeIf` and `Stream.filter` take a `Predicate`. `Stream.map` takes a `Function`. `IntStream.mapToObj` takes an `IntFunction`. `Iterable.forEach` and `Stream.forEach` take a `Consumer`. `Optional.orElseGet` and `Collectors.toCollection` take a `Supplier`. `List.sort` and `Stream.sorted` take a `Comparator`. `List.replaceAll` takes a `UnaryOperator`. `Stream.reduce` takes a `BinaryOperator`. `Map.merge` takes a `BiFunction` as its third argument. A `BinaryOperator` is that `BiFunction` when both arguments and the result share one type.
 
 A method reference is a lambda whose body is a single call.
 
