@@ -16,23 +16,22 @@ Work in this order.
 2. One LeetCode problem for each interface.
 3. Lambdas and method references on a list.
 4. Fizz Buzz written again as a stream.
-5. Four take-home exercises, one interface each.
+5. The methods on `com.ledger.exercises.Exercises`, written with streams.
 
 Put each program in its own file under `src/main/java`. One public class per file. The file name is the class name.
 
 ```text
 src/main/java/com/ledger/collections/
-├── FizzBuzz.java
-├── ContainsDuplicate.java
-├── RecentCounter.java
-├── TwoSum.java
-└── ListOperations.java
+├── list/FizzBuzz.java
+├── set/ContainsDuplicate.java
+├── queue/RecentCounter.java
+└── map/TwoSum.java
 ```
 
 From the `week-2-collections-streams` directory, run a class with:
 
 ```bash
-mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.FizzBuzz
+mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.list.FizzBuzz
 ```
 
 `-q` hides Maven's own log lines. `compile` rebuilds changed sources. `exec:java` starts a `main`. `pom.xml` already points that plugin at `com.ledger.app.App`. `-Dexec.mainClass` points it at the class you just wrote. Swap the class name for the program you want to run.
@@ -50,7 +49,7 @@ Collection
 Map           HashMap       lookup by key
 ```
 
-`ArrayDeque` implements `Deque`. `Deque` extends `Queue`. You can store an `ArrayDeque` in a `Queue` variable. `Queue` provides `add`, `poll`, and `peek`. `Deque` also provides `push` and `pop`. The Valid Parentheses exercise calls `push` and `pop`. That variable is a `Deque`.
+`ArrayDeque` implements `Deque`. `Deque` extends `Queue`. You can store an `ArrayDeque` in a `Queue` variable. `Queue` provides `add`, `poll`, and `peek`. `Deque` also provides `push` and `pop`.
 
 These match types you already use. `List` is a `list`. `Set` is a `set`. `Queue` is a `collections.deque` used with `append` and `popleft`. `Map` is a `dict`. A `List<String>` rejects an `int` at compile time. A Python list accepts that `int`.
 
@@ -134,12 +133,12 @@ A list keeps duplicates and order. A set keeps one copy of a repeated element. A
 
 ## List: Fizz Buzz
 
-Create `src/main/java/com/ledger/collections/FizzBuzz.java`.
+Create `src/main/java/com/ledger/collections/list/FizzBuzz.java`.
 
 This is LeetCode 412. Given `n`, return the words for `1` through `n`, in that order. A multiple of 3 and 5 is `"FizzBuzz"`. A multiple of 3 is `"Fizz"`. A multiple of 5 is `"Buzz"`. Anything else is the number as a string. `"Fizz"` can appear many times. Position matters. The result is a `List`. A `Set` would drop the repeated words and the order.
 
 ```java
-package com.ledger.collections;
+package com.ledger.collections.list;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,7 +175,7 @@ The `% 15` test comes before `% 3`. Fifteen is divisible by 3. The other order w
 Run it.
 
 ```bash
-mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.FizzBuzz
+mvn -q compile exec:java -Dexec.mainClass=com.ledger.collections.list.FizzBuzz
 ```
 
 `n` of 15 prints a list of 15 strings. Index 0 is `"1"`. The entries for 3, 6, 9, and 12 are `"Fizz"`. The entries for 5 and 10 are `"Buzz"`. The last entry is `"FizzBuzz"`.
@@ -187,12 +186,12 @@ Fizz Buzz builds an ordered result. The word `"Fizz"` can appear more than once.
 
 ## Set: Contains Duplicate
 
-Create `src/main/java/com/ledger/collections/ContainsDuplicate.java`.
+Create `src/main/java/com/ledger/collections/set/ContainsDuplicate.java`.
 
 This is LeetCode 217. Return `true` when any value appears at least twice. A set cannot hold the same value twice. `add` returns whether the value was new.
 
 ```java
-package com.ledger.collections;
+package com.ledger.collections.set;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -230,12 +229,12 @@ Contains Duplicate is a `Set<Integer>` stored in a `HashSet`. `add` returns `fal
 
 ## Queue: Number of Recent Calls
 
-Create `src/main/java/com/ledger/collections/RecentCounter.java`.
+Create `src/main/java/com/ledger/collections/queue/RecentCounter.java`.
 
 This is LeetCode 933. `ping(t)` records a call at time `t` and returns how many calls arrived in the window `[t - 3000, t]`. The times you receive are increasing. The oldest call is always at the front. That is a queue. `add` puts the new time at the back. `poll` takes from the front.
 
 ```java
-package com.ledger.collections;
+package com.ledger.collections.queue;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -277,12 +276,12 @@ Number of Recent Calls is a `Queue` of timestamps. `add` records the new call. `
 
 ## Map: Two Sum
 
-Create `src/main/java/com/ledger/collections/TwoSum.java`.
+Create `src/main/java/com/ledger/collections/map/TwoSum.java`.
 
 This is LeetCode 1. Return the indexes of the two numbers that add up to `target`. There is exactly one answer. You may not use the same index twice. A map from value to index tells you whether you have already seen the complement. You do not scan the front of the array again.
 
 ```java
-package com.ledger.collections;
+package com.ledger.collections.map;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -485,38 +484,25 @@ The terminal operation collects into a `List`, a `Set`, or a `Map`. Keep a loop 
 
 ## Take-home exercises
 
-Each exercise uses one interface. Write the method. Declare the variable as that interface. Run it from a `main`, the same way as the programs above.
+Write the rest of `src/main/java/com/ledger/exercises/Exercises.java` with streams.
 
-### List: 118. Pascal's Triangle
+`Client.all()`, `Account.all()`, and `Bank.all()` build the three lists. The fields are private. You read them with the getters. `Main` passes the three lists to the `Exercises` constructor and prints every method.
 
-Return `List<List<Integer>>`. Row `r` has `r + 1` numbers. The first and last cells of a row are `1`. Every other cell is the sum of the two cells above it. That sum is `rows.get(r - 1).get(c - 1) + rows.get(r - 1).get(c)`.
+From `week-2-collections-streams`:
 
-The row needs an index. The cell needs an index. The `1` at each end is a deliberate duplicate. A `Set` has no index. A `Set` keeps only one copy of `1`. Each row is its own `ArrayList`, stored inside the outer `ArrayList`. Both variable types are `List`.
-
-### Set: 349. Intersection of Two Arrays
-
-Return the values present in both arrays, each value once. Store them in a `Set<Integer>`. `add` drops a value that is already in the set. LeetCode's method returns `int[]`. After the set is built, `seen.stream().mapToInt(Integer::intValue).toArray()` copies the set into that array.
-
-### Queue: 20. Valid Parentheses
-
-The brackets `()`, `[]`, and `{}` are valid when they close in the right order. Use a stack.
-
-```java
-Deque<Character> stack = new ArrayDeque<>();
-Map<Character, Character> pairs = Map.of(')', '(', ']', '[', '}', '{');
+```bash
+mvn -q compile
+java -cp target/classes com.ledger.exercises.Main
 ```
 
-`Deque` extends `Queue`. Declare the stack as a `Deque`. `push` and `pop` are declared on `Deque`. A `Queue` variable does not have them. `push` puts the opener on the front. On a closer, `pop` has to return the opener that `pairs` maps that closer to. An empty stack at the end means every opener was closed.
-
-`Map.of` builds a fixed map of the three pairs. The stack is still the `Deque`. The map stores the opener for each closer.
-
-### Map: 242. Valid Anagram
-
-`s` and `t` are anagrams when they hold the same characters the same number of times. Use a frequency map.
+`listClientIds` is already written. That is the shape to copy.
 
 ```java
-Map<Character, Integer> counts = new HashMap<>();
-counts.merge(c, 1, Integer::sum);
+return clients.stream().map(Client::getId).toArray(Integer[]::new);
 ```
 
-`merge` stores `1` when `c` is new. When `c` is already there, it calls `Integer::sum` with the old count and `1`. That is the `Integer::sum` method reference from above. Go through `t` with `merge(c, -1, Integer::sum)`. Treat a negative count as failure. Two strings of different length are not anagrams. Check the lengths before you build the map.
+`clients` is a `List<Client>`. `stream()` starts the pipeline. `map(Client::getId)` keeps the id of each client. `toArray(Integer[]::new)` ends the pipeline and returns an `Integer[]`. Question 0 prints `[1, 2, 3, 4, 5, 6]`.
+
+The other eight methods return an empty array, an empty map, or `-1`. The comment above each method is what it has to return. `filter`, `map`, `sorted`, and `collect` are the operations you need.
+
+`newClientRanking` adds a client who is not in `clients`, and one account at the bank named `ESTADO` with balance 9000. It returns that client's place in the ranking from `sortClientsTotalBalances`. Copy the lists into a new `ArrayList` before you add. The lists from `all()` come from `List.of`, and `add` on those lists throws.

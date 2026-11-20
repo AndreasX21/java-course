@@ -1,4 +1,4 @@
-package com.ledger.excercise;
+package com.ledger.exercises;
 
 import java.util.Arrays;
 import java.util.Map;
