@@ -11,6 +11,8 @@ public class Consumers {
         // input: one String. output: nothing.
         Consumer<String> print = System.out::println;
 
+        print.accept("a");
+
         List.of("a", "bb").forEach(print);
     }
 }

@@ -21,14 +21,14 @@ public class Solutions {
     }
 
     /**
-     * Client ids, in the same order as {@link Client#all()}.
+     * 0. Client ids, in the same order as {@link Client#all()}.
      */
     public Integer[] listClientIds() {
         return clients.stream().map(Client::getId).toArray(Integer[]::new);
     }
 
     /**
-     * Client ids sorted by tax number.
+     * 1. Client ids sorted by tax number.
      */
     public Integer[] listClientsIdsSortByTaxNumber() {
         return clients.stream()
@@ -38,7 +38,7 @@ public class Solutions {
     }
 
     /**
-     * Client names sorted from highest to lowest by the total balance of that
+     * 2. Client names sorted from highest to lowest by the total balance of that
      * client across every bank.
      */
     public String[] sortClientsTotalBalances() {
@@ -46,7 +46,7 @@ public class Solutions {
     }
 
     /**
-     * Bank name to the tax numbers of that bank's clients, sorted alphabetically
+     * 3. Bank name to the tax numbers of that bank's clients, sorted alphabetically
      * by client name.
      */
     public Map<String, String[]> banksClientsTaxNumbers() {
@@ -62,7 +62,7 @@ public class Solutions {
     }
 
     /**
-     * Balances of clients with more than 25_000 in the bank named SANTANDER,
+     * 4. Balances of clients with more than 25_000 in the bank named SANTANDER,
      * sorted from highest to lowest. A client's balance at that bank is the sum
      * of their accounts there.
      */
@@ -78,7 +78,7 @@ public class Solutions {
     }
 
     /**
-     * Bank ids sorted from lowest to highest by the total balance the bank holds.
+     * 5. Bank ids sorted from lowest to highest by the total balance the bank holds.
      */
     public Integer[] banksRankingByTotalBalance() {
         Map<Integer, Integer> totalByBank = totalsBy(Account::getBankId);
@@ -89,7 +89,7 @@ public class Solutions {
     }
 
     /**
-     * Bank name to the number of clients who have accounts only in that bank.
+     * 6. Bank name to the number of clients who have accounts only in that bank.
      */
     public Map<String, Integer> banksFidelity() {
         Map<Integer, Set<Integer>> banksByClient = accounts.stream()
@@ -102,7 +102,7 @@ public class Solutions {
     }
 
     /**
-     * Bank name to the id of the client with the least money in that bank. A
+     * 7. Bank name to the id of the client with the least money in that bank. A
      * client's money in a bank is the sum of their accounts there.
      */
     public Map<String, Integer> banksPoorClients() {
@@ -117,7 +117,7 @@ public class Solutions {
     }
 
     /**
-     * Add a fictional client and one account at the bank named ESTADO with
+     * 8. Add a fictional client and one account at the bank named ESTADO with
      * balance 9000. Do not modify {@code clients} or {@code accounts}. Return
      * the place this client occupies in the ranking from
      * {@link #sortClientsTotalBalances()}.
