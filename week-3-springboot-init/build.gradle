@@ -36,6 +36,7 @@ dependencies {
 
 	// Source: https://mvnrepository.com/artifact/io.swagger.core.v3/swagger-annotations
 	implementation("io.swagger.core.v3:swagger-annotations:3.0.0")
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:3.2.1'
 
     // Source: https://mvnrepository.com/artifact/org.mapstruct/mapstruct
     implementation("org.mapstruct:mapstruct:1.7.0.Beta2")
