@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '4.2.0'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.diffplug.spotless' version '8.12.0'
 }
 
 group = 'com.example'
@@ -29,6 +30,20 @@ dependencies {
 	testCompileOnly 'org.projectlombok:lombok'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+spotless {
+	java {
+		eclipse('4.41').configFile('eclipse-formatter.xml')
+		removeUnusedImports()
+		importOrder('\\#', 'java', 'javax', 'org', 'com', '')
+		trimTrailingWhitespace()
+		endWithNewline()
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	options.compilerArgs.add('-Xlint:all')
 }
 
 tasks.named('test') {
