@@ -1,7 +1,13 @@
 package com.example.demo.controller;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +39,22 @@ public class AccountController {
         var responseDto = accountMapper.domainDtoToResponseDto(accountDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AccountResponseDto>> getAccounts() {
+        List<AccountDto> accountDtos = accountService.getAccounts();
+        var responseDtos = accountDtos.stream()
+                .map(accountMapper::domainDtoToResponseDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(responseDtos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable UUID id) {
+        AccountDto accountDto = accountService.getAccountById(id);
+        var responseDto = accountMapper.domainDtoToResponseDto(accountDto);
+        return ResponseEntity.ok(responseDto);
     }
 
 }

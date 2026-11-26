@@ -1,5 +1,8 @@
 package com.example.demo.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 
 import com.example.demo.repository.IAccountRepo;
@@ -17,6 +20,16 @@ public class AccountService implements IAccountService {
     public AccountDto createAccount(AccountDto accountDto) {
         var savedAccount = accountRepo.save(accountDto);
         return savedAccount;
+    }
+
+    @Override
+    public List<AccountDto> getAccounts() {
+        return accountRepo.getAllAccounts();
+    }
+
+    @Override
+    public AccountDto getAccountById(UUID id) {
+        return accountRepo.getAccountById(id);
     }
 
 }
