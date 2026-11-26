@@ -19,6 +19,7 @@ import com.example.demo.controller.mapper.AccountMapper;
 import com.example.demo.service.IAccountService;
 import com.example.demo.service.dtos.AccountDto;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -31,6 +32,7 @@ public class AccountController {
     private final IAccountService accountService;
 
     @PostMapping
+    @Operation(summary = "Create account", description = "Create account")
     public ResponseEntity<AccountResponseDto> createAccount(
             @Valid @RequestBody AccountRequestDto requestDto) {
 
@@ -42,6 +44,7 @@ public class AccountController {
     }
 
     @GetMapping
+    @Operation(summary = "Get all accounts", description = "Get all accounts")
     public ResponseEntity<List<AccountResponseDto>> getAccounts() {
         List<AccountDto> accountDtos = accountService.getAccounts();
         var responseDtos = accountDtos.stream()
@@ -51,6 +54,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Get account by ID", description = "Get account by ID")
     public ResponseEntity<AccountResponseDto> getAccountById(@PathVariable UUID id) {
         AccountDto accountDto = accountService.getAccountById(id);
         var responseDto = accountMapper.domainDtoToResponseDto(accountDto);
